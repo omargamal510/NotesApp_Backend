@@ -1,6 +1,9 @@
 import { userModel } from "../../databases/models/user.model.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
+dotenv.config();
 const signup = async (req, res) => {
   await userModel.insertMany(req.body);
   res.json({ message: "Register  successfull" });
@@ -8,24 +11,14 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
   let user = await userModel.findOne({ email: req.body.email });
-  //   let match = ;
-  // let token = jwt.sign(
-  //   { userId: user._id, role: user.role },
-  //   "myNameIsOmarGamalElden"
-  // );
 
-  // myNameIsOmar is a secret key
+  let token = jwt.sign(
+    { userId: user._id, role: user.role },
+    process.env.JWT_SECRET
+  );
 
   if (user && bcrypt.compareSync(req.body.password, user.password))
-    return res.json({ message: "login success" });
-
-  // t or f
-  //     if (match) {
-  //       return res.json({ message: "login .. token" });
-  //     }
-  //   } else {
-  //     return res.json({ message: "Incorrect email or password" });
-  //   }
+    return res.json({ message: "login success", token });
 
   res.json({ message: "Incorrect email or password" });
 };

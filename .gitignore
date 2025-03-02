@@ -1,3 +1,4 @@
 node_modules/
 .env
+echo ".env" >> .gitignore
 .DS_Store # (if you're on macOS)

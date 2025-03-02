@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export function dbConnection() {
   mongoose
-    .connect("mongodb+srv://root:12345@cluster0.tfaaz.mongodb.net/notes_app")
+    .connect(process.env.DB_URI)
     .then(() => console.log("db connected !"))
     .catch((err) => console.log("db error"));
 }
